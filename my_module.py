@@ -54,7 +54,7 @@ def get_bert_embedding(my_text):
 
 
 def process_prompt(prompt):
-    all_quant_scores = []  # Store quant scores for all prompts
+    result_data = []  # Store quant scores for all prompts
     responses = get_openai_responses(prompt)
 
     prompt_embedding = get_bert_embedding(prompt)
@@ -81,11 +81,7 @@ def process_prompt(prompt):
         "sample_size": sample_size
     }
 
-    all_quant_scores.append({"prompt": prompt, "quant_scores": quant_scores})
-
-    result_data = {
-        "all_quant_scores": all_quant_scores
-    }
+    result_data.append({"prompt": prompt, "quant_scores": quant_scores})
 
     return result_data
 
