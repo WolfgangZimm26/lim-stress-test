@@ -68,8 +68,7 @@ def process_prompt(prompt):
 
     mean_score = np.mean(cosine_sim_scores)
     median_score = np.median(cosine_sim_scores)
-    mode_result = stats.mode(cosine_sim_scores)
-    mode_score = float(mode_result.mode[0])
+    mode_score = stats.mode(cosine_sim_scores)
     average_score = np.average(cosine_sim_scores)
     sample_size = len(cosine_sim_scores)
 
@@ -89,7 +88,7 @@ def process_prompt(prompt):
 if __name__ == "__main__":
     # Example of how to use the module
     prompt_example = "What is the best meal for dinner?"
-    result = process_prompt(prompt_example)
+    a_result = process_prompt(prompt_example)
 
     with open('results.json', 'w') as f:
-        json.dump(result, f, indent=2)
+        json.dump(a_result, f, indent=2)
