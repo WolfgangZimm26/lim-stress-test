@@ -1,4 +1,4 @@
-import openai
+from openai import OpenAI
 import torch
 from transformers import BertTokenizer, BertModel
 from sklearn.metrics.pairwise import cosine_similarity
@@ -8,7 +8,12 @@ import json
 from itertools import combinations
 import time
 import random
+import os
 
+client = OpenAI(
+    # This is the default and can be omitted
+    api_key=os.environ.get("OPENAI_API_KEY"),
+)
 
 def get_openai_responses(prompt, num_responses=40, max_tokens=100, initial_delay: float = 1,
                          exponential_base: float = 2, jitter: bool = True):
@@ -19,7 +24,7 @@ def get_openai_responses(prompt, num_responses=40, max_tokens=100, initial_delay
 
     while len(responses) < num_responses and retries < max_retries:
         try:
-            AI_response = openai.chat.completions.create(
+            AI_response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant that provides meal recommendations."},

@@ -7,9 +7,6 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-# Copy the .env file into the container
-COPY .env /app/.env
-
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
@@ -17,4 +14,4 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 EXPOSE 80
 
 # Set the environment variables from the .env file
-CMD ["bash", "-c", "source /app/.env && uvicorn main:app --host 0.0.0.0 --port 80"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
