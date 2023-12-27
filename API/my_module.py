@@ -9,7 +9,10 @@ from itertools import combinations
 import time
 import random
 import os
+from dotenv import load_dotenv
 
+# Load the environment variables from .env file
+load_dotenv()
 client = OpenAI(
     # This is the default and can be omitted
     api_key=os.environ.get("OPENAI_API_KEY"),
@@ -28,7 +31,7 @@ def get_openai_responses(prompt, num_responses=40, max_tokens=100, initial_delay
             AI_response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    {"role": "system", "content": "You are a helpful assistant that provides meal recommendations."},
+                    {"role": "system", "content": "You are a helpful assistant that provides recommendations."},
                     {"role": "user", "content": prompt},
                 ],
                 max_tokens=max_tokens,
@@ -36,11 +39,12 @@ def get_openai_responses(prompt, num_responses=40, max_tokens=100, initial_delay
             )
             response_content = AI_response["choices"][0]["message"]["content"]
             responses.append(response_content)
-        except OpenAI.RateLimitError:
-            delay *= exponential_base * (1 + jitter * random.random())  # implementation of exponential backing off
-            print(f"Rate limit exceeded. Waiting for {delay} seconds.")
-            time.sleep(delay)
-            retries += 1
+        except  Exception as e:
+            if 'rate limit' in str(e).lower():
+                delay *= exponential_base * (1 + jitter * random.random())  # implementation of exponential backing off
+                print(f"Rate limit exceeded. Waiting for {delay} seconds.")
+                time.sleep(delay)
+                retries += 1
 
     if retries == max_retries:
         print("Max retries reached. Unable to get a successful response.")
