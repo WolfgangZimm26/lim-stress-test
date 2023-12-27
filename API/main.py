@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import my_module  # Import your module
 
+#call fast api
 app = FastAPI()
 
 class InputData(BaseModel):
