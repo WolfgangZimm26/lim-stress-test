@@ -10,11 +10,11 @@ import time
 import random
 import os
 
-#Get open Ai key
 client = OpenAI(
     # This is the default and can be omitted
     api_key=os.environ.get("OPENAI_API_KEY"),
 )
+
 
 def get_openai_responses(prompt, num_responses=40, max_tokens=100, initial_delay: float = 1,
                          exponential_base: float = 2, jitter: bool = True):
@@ -36,7 +36,7 @@ def get_openai_responses(prompt, num_responses=40, max_tokens=100, initial_delay
             )
             response_content = AI_response["choices"][0]["message"]["content"]
             responses.append(response_content)
-        except openai.RateLimitError:
+        except OpenAI.RateLimitError:
             delay *= exponential_base * (1 + jitter * random.random())  # implementation of exponential backing off
             print(f"Rate limit exceeded. Waiting for {delay} seconds.")
             time.sleep(delay)
