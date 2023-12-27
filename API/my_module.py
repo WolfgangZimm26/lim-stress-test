@@ -10,6 +10,7 @@ import time
 import random
 import os
 
+#Get open Ai key
 client = OpenAI(
     # This is the default and can be omitted
     api_key=os.environ.get("OPENAI_API_KEY"),
