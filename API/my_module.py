@@ -100,10 +100,11 @@ def process_prompt(prompt):
 
     cosine_sim_scores = []
     # Create combinations of the prompt embedding and all response embeddings
-    embedding_pairs = list(combinations([prompt_embedding] + response_embeddings, 2))
-    for pair in embedding_pairs:
-        # Since the embeddings are lists, they can be directly used
-        score = cosine_similarity([pair[0][0]], [pair[1][0]])[0][0]
+    response_embeddings = [get_bert_embedding(response) for response in responses]
+    cosine_sim_scores = []
+    for emb1, emb2 in combinations(response_embeddings, 2):
+        # Compute cosine similarity between each pair of response embeddings
+        score = cosine_similarity(emb1, emb2)[0][0]
         cosine_sim_scores.append(score)
 
         # Calculate statistical measures
@@ -118,17 +119,17 @@ def process_prompt(prompt):
         else:
             mode_score = mode_result.mode[0] if mode_result.mode.size else None
         average_score = np.average(cosine_sim_scores)
-        sample_size = len(cosine_sim_scores)
+    sample_size = len(cosine_sim_scores)
 
-        quant_scores = {
-            "mean": mean_score,
-            "median": median_score,
-            "mode": mode_score,
-            "average": average_score,
-            "sample_size": sample_size
-        }
+    quant_scores = {
+        "mean": mean_score,
+        "median": median_score,
+        "mode": mode_score,
+        "average": average_score,
+        "sample_size": sample_size
+    }
 
-        result_data.append({"prompt": prompt, "quant_scores": quant_scores})
+    result_data.append({"prompt": prompt, "quant_scores": quant_scores})
 
     return result_data
 
